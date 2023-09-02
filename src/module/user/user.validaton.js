@@ -31,4 +31,5 @@ export const updateSupervisorAdmin = joi.object({
     file: generalFields.file,
     userName: joi.string().min(3).max(20),
     phone: joi.string(),
+    supervisorId: generalFields.id,
 }).required();
