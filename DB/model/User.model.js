@@ -35,7 +35,7 @@ const userSchema = new Schema({
     role: {
         type: String,
         default: 'User',
-        enum: ['User', 'Supervisor_Admin', 'Super_Admin']
+        enum: ['User', 'Admin']
     },
     changePasswordTime: {
         type: Date,

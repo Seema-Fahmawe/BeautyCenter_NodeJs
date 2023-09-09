@@ -5,8 +5,7 @@ import userModel from './../../DB/model/User.model.js';
 
 export const roles = {
     User: 'User',
-    Supervisor_Admin: 'Supervisor_Admin',
-    Super_Admin: 'Super_Admin',
+    Admin:'Admin',
     Owner: 'Owner',
 }
 
