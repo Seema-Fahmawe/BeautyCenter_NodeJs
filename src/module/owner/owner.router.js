@@ -8,5 +8,6 @@ const router = Router();
 
 router.patch('/updateStatusOwner/:ownerId', auth(endPoint.updateStatus), validation(validators.updateStatusOwner), ownerController.updateStatusOwner);
 router.get('/allOwners', ownerController.getOwners);
+router.get('/ownerDetails/:ownerId', validation(validators.ownerDetails), ownerController.ownerDetails);
 
 export default router;
