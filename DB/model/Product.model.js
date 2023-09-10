@@ -37,9 +37,6 @@ const productSchema = new Schema({
         type: Number,
         default: 1,
     },
-    colors: [{
-        type: String,
-    }],
     categoryId: {
         type: Types.ObjectId,
         ref: 'Category',

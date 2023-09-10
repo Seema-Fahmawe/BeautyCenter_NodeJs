@@ -6,7 +6,7 @@ import categoryRouter from './category/category.router.js';
 import subcategoryRouter from './subcategory/subcategory.router.js';
 import ownerRouter from './owner/owner.router.js';
 import couponRouter from './coupon/coupon.router.js';
-
+import productRouter from './product/product.router.js';
 import cors from 'cors';
 
 const initApp = (app, express) => {
@@ -25,7 +25,8 @@ const initApp = (app, express) => {
     app.use('/category', categoryRouter);
     app.use('/owner', ownerRouter);
     app.use('/subcategory', subcategoryRouter);
-    app.use('/coupon',couponRouter);
+    app.use('/coupon', couponRouter);
+    app.use('/product', productRouter);
     app.use('*', (req, res) => {
         return res.json({ message: 'page not found' });
     })
