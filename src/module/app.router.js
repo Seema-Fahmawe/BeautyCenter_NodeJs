@@ -3,6 +3,7 @@ import { globalErrorHandler } from "../service/errorHandling.js";
 import authRouter from './auth/auth.router.js';
 import userRouter from './user/user.router.js';
 import categoryRouter from './category/category.router.js';
+import subcategoryRouter from './subcategory/subcategory.router.js';
 import ownerRouter from './owner/owner.router.js';
 import cors from 'cors';
 
@@ -21,6 +22,7 @@ const initApp = (app, express) => {
     app.use('/user', userRouter);
     app.use('/category', categoryRouter);
     app.use('/owner', ownerRouter);
+    app.use('/subcategory', subcategoryRouter);
     app.use('*', (req, res) => {
         return res.json({ message: 'page not found' });
     })

@@ -5,8 +5,10 @@ import { auth, roles } from "../../middleware/auth.middleware.js";
 import { endPoint } from "./category.endPoints.js";
 import { validation } from "../../middleware/validation.js";
 import * as validators from './category.validation.js';
+import subcategoryRouter from '../subcategory/subcategory.router.js';
 const router = Router();
 
+router.use('/:categoryId',subcategoryRouter);
 router.post('/createCategory', auth(endPoint.createCategory), fileUpload(fileValidation.image).single('image'),
     validation(validators.createCategory), categoryController.createCategory);
 
