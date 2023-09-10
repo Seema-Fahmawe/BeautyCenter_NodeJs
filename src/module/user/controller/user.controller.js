@@ -2,8 +2,6 @@
 import { asyncHandler } from './../../../service/errorHandling.js';
 import cloudinary from './../../../service/cloudinary.js';
 import userModel from '../../../../DB/model/User.model.js';
-import { generateToken } from '../../../service/generateAndVerifyToken.js';
-import sendEmail from '../../../service/sendEmail.js';
 import { compare, hash } from '../../../service/hashAndCompare.js';
 
 export const profilePic = asyncHandler(async (req, res, next) => {

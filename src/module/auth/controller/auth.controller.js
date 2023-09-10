@@ -8,7 +8,7 @@ import { asyncHandler } from './../../../service/errorHandling.js';
 import ownerModel from '../../../../DB/model/Owner.model.js';
 
 export const signup = asyncHandler(async (req, res, next) => {
-  let { userName, email, password, cPassword, phone } = req.body;
+  let { userName, email, password, cPassword, phone, gender } = req.body;
   if (await userModel.findOne({ email })) {
     return next(new Error('account already exists', { cause: 409 }));
   }
@@ -280,7 +280,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     </body>
     </html>`
   await sendEmail(email, 'confirm email', html);
-  const user = await userModel.create({ email, userName, password, phone });
+  const user = await userModel.create({ email, userName, password, phone, gender });
   return res.status(201).json({ message: 'success', user: user._id });
 })
 
@@ -656,7 +656,7 @@ export const forgetPassword = asyncHandler(async (req, res, next) => {
 })
 
 export const signupOwner = asyncHandler(async (req, res, next) => {
-  let { ownerName, centerName, email, password, cPassword, phone, city } = req.body;
+  let { ownerName, centerName, email, password, cPassword, phone, city, gender } = req.body;
   if (await ownerModel.findOne({ email })) {
     return next(new Error('account already exists', { cause: 409 }));
   }
@@ -928,7 +928,7 @@ export const signupOwner = asyncHandler(async (req, res, next) => {
     </body>
     </html>`
   await sendEmail(email, 'confirm email', html);
-  const owner = await ownerModel.create({ email, ownerName, centerName, password, phone, city });
+  const owner = await ownerModel.create({ email, ownerName, centerName, password, phone, city, gender });
   return res.status(201).json({ message: 'success', owner: owner._id });
 })
 

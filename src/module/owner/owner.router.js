@@ -7,4 +7,6 @@ import * as validators from './owner.validation.js';
 const router = Router();
 
 router.patch('/updateStatusOwner/:ownerId', auth(endPoint.updateStatus), validation(validators.updateStatusOwner), ownerController.updateStatusOwner);
+router.get('/allOwners', ownerController.getOwners);
+
 export default router;

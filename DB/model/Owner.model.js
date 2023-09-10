@@ -47,6 +47,11 @@ const ownerSchema = new Schema({
     role: {
         type: String,
         default: 'Owner',
+    },
+    gender: {
+        type: String,
+        default: 'Female',
+        enum: ['Male', 'Female']
     }
 }, {
     timestamps: true,

@@ -8,6 +8,7 @@ export const signup = joi.object({
     email: generalFields.email.required(),
     cPassword: joi.string().valid(joi.ref('password')).required(),
     phone: joi.string(),
+    gender:joi.string(),
 }).required();
 
 export const token = joi.object({
@@ -39,4 +40,5 @@ export const signupOwner = joi.object({
     file: generalFields.file,
     phone: joi.string().required(),
     city: joi.string().required(),
+    gender:joi.string(),
 }).required();

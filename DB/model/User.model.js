@@ -39,6 +39,11 @@ const userSchema = new Schema({
     },
     changePasswordTime: {
         type: Date,
+    },
+    gender: {
+        type: String,
+        default: 'Female',
+        enum: ['Male', 'Female']
     }
 }, {
     timestamps: true,
