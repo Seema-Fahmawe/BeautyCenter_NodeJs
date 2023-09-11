@@ -23,11 +23,6 @@ export const getUsers = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ message: 'success', users });
 })
 
-export const getAdmins = asyncHandler(async (req, res, next) => {
-  const admins = await userModel.find({ role: 'Admin' });
-  return res.status(200).json({ message: 'success', admins });
-})
-
 export const getSpecificUser = asyncHandler(async (req, res, next) => {
   const user = await userModel.findById(req.params.userId);
   return res.json({ message: 'success', user });

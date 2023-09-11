@@ -9,8 +9,9 @@ const router = Router();
 
 router.patch('/profilePic', auth(Object.values(roles)), fileUpload(fileValidation.image).single('image'),
     validation(validators.profilePic), userController.profilePic);
+
 router.get('/allUsers', auth(endPoint.getUsers), userController.getUsers);
-router.get('/allAdmins', auth(endPoint.getAdmins), userController.getAdmins);
+
 router.get('/:userId/userDetails', auth(endPoint.userDetails), validation(validators.userDetails),
     userController.getSpecificUser);
 

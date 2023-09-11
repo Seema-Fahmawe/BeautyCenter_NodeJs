@@ -8,3 +8,9 @@ export const updateStatusOwner = joi.object({
 export const ownerDetails = joi.object({
     ownerId: generalFields.id.required(),
 }).required();
+
+export const updateOwner = joi.object({
+    phone: joi.string(),
+    city: joi.string(),
+    centerName:joi.string(),
+}).required();
