@@ -12,4 +12,9 @@ router.post('/createProduct', auth(endPoint.createProduct), fileUpload(fileValid
     { name: 'subImages', maxCount: 20 },
 ]), validation(validators.createProduct), productController.createProduct);
 
+router.put('/updateProduct/:productId', auth(endPoint.updateProduct), fileUpload(fileValidation.image).fields([
+    { name: 'mainImage', maxCount: 1 },
+    { name: 'subImages', maxCount: 20 },
+]), validation(validators.updateProduct), productController.updateProduct);
+
 export default router;

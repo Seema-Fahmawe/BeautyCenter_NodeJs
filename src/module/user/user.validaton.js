@@ -6,7 +6,7 @@ export const profilePic = joi.object({
 }).required();
 
 export const userDetails = joi.object({
-    userId: generalFields.id,
+    userId: generalFields.id.required(),
 }).required();
 
 export const updatePassword = joi.object({

@@ -23,7 +23,7 @@ export const generalFields = {
         size: joi.number().positive().required(),
         dest: joi.string(),
     }),
-    id: joi.string().custom(validationObjectId).required(),
+    id: joi.string().custom(validationObjectId),
 }
 
 
