@@ -8,6 +8,5 @@ export const createProduct = joi.object({
     price: joi.number().positive().required(),
     description: joi.string(),
     discount: joi.number().positive(),
-    stock: joi.number().positive(),
     file: generalFields.file,
 }).required();

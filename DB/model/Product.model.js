@@ -33,10 +33,6 @@ const productSchema = new Schema({
         type: Number,
         default: 1,
     },
-    stock: {
-        type: Number,
-        default: 1,
-    },
     categoryId: {
         type: Types.ObjectId,
         ref: 'Category',

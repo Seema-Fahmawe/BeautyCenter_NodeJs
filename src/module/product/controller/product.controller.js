@@ -6,7 +6,7 @@ import subcategoryModel from './../../../../DB/model/Subcategory.model.js';
 
 export const createProduct = asyncHandler(async (req, res, next) => {
 
-    let { name, price, description, discount, stock, categoryId, subcategoryId, finalPrice } = req.body;
+    let { name, price, description, discount, categoryId, subcategoryId, finalPrice } = req.body;
     const checkCategory = await subcategoryModel.findOne({ _id: subcategoryId, categoryId });
     if (!checkCategory) {
         return next(new Error('invalid category or sub category', { cause: 400 }));
@@ -27,7 +27,7 @@ export const createProduct = asyncHandler(async (req, res, next) => {
     }
     const product = await productModel.create({
         name, price, description, slug: slugify(name), mainImage: { public_id, secure_url }, subImages: subImages,
-        createdBy: req.owner._id, updatedBy: req.owner._id, stock, categoryId, subcategoryId, finalPrice, discount
+        createdBy: req.owner._id, updatedBy: req.owner._id, categoryId, subcategoryId, finalPrice, discount
     });
     return res.status(201).json({ message: 'success', product });
 })
