@@ -102,3 +102,56 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
     await product.save();
     return res.status(201).json({ message: 'success', product });
 })
+
+export const softDelete = asyncHandler(async (req, res, next) => {
+
+    const { productId } = req.params;
+    const product = await productModel.findOneAndUpdate({ _id: productId, isDeleted: false },
+        { isDeleted: true }, { new: true });
+    if (!product) {
+        return next(new Error('product not found', { cause: 400 }));
+    }
+    return res.status(200).json({ message: 'success', product });
+})
+
+export const forceDelete = asyncHandler(async (req, res, next) => {
+
+    const { productId } = req.params;
+    const product = await productModel.findOneAndDelete({ _id: productId, isDeleted: true });
+    if (!product) {
+        return next(new Error('product not found', { cause: 400 }));
+    }
+    return res.status(200).json({ message: 'success' });
+})
+
+export const restoreProduct = asyncHandler(async (req, res, next) => {
+
+    const { productId } = req.params;
+    const product = await productModel.findOneAndUpdate({ _id: productId, isDeleted: true },
+        { isDeleted: false }, { new: true });
+    if (!product) {
+        return next(new Error('product not found', { cause: 400 }));
+    }
+    return res.status(200).json({ message: 'success', product });
+})
+
+export const getAllProducts = asyncHandler(async (req, res, next) => {
+
+    const products = await productModel.find();
+    return res.status(200).json({ message: 'success', products });
+})
+
+export const productDetails = asyncHandler(async (req, res, next) => {
+
+    const product = await productModel.findById(req.params.productId);
+    if (!product) {
+        return next(new Error('product not found', { cause: 400 }));
+    }
+    return res.status(201).json({ message: 'success', product });
+})
+
+export const getSoftDeleteProducts = asyncHandler(async (req, res, next) => {
+
+    const product = await productModel.find({ isDeleted: true });
+    return res.status(201).json({ message: 'success', product });
+})

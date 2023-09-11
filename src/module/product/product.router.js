@@ -17,4 +17,19 @@ router.put('/updateProduct/:productId', auth(endPoint.updateProduct), fileUpload
     { name: 'subImages', maxCount: 20 },
 ]), validation(validators.updateProduct), productController.updateProduct);
 
+router.patch('/softDelete/:productId', auth(endPoint.softDelete), validation(validators.softDelete),
+    productController.softDelete);
+
+router.delete('/forceDelete/:productId', auth(endPoint.forceDelete), validation(validators.forceDelete),
+    productController.forceDelete);
+
+router.patch('/restoreProduct/:productId', auth(endPoint.restoreProduct), validation(validators.restoreProduct),
+    productController.restoreProduct);
+
+router.get('/allProducts', productController.getAllProducts);
+
+router.get('/productDetails/:productId', validation(validators.productDetails), productController.productDetails);
+
+router.get('/softDeleteProducts', productController.getSoftDeleteProducts);
+
 export default router;

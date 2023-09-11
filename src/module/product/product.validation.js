@@ -20,5 +20,21 @@ export const updateProduct = joi.object({
     discount: joi.number().positive(),
     file: generalFields.file,
     updatedBy: generalFields.id,
-    productId:generalFields.id.required(),
+    productId: generalFields.id.required(),
+}).required();
+
+export const softDelete = joi.object({
+    productId: generalFields.id.required(),
+}).required();
+
+export const forceDelete = joi.object({
+    productId: generalFields.id.required(),
+}).required();
+
+export const restoreProduct = joi.object({
+    productId: generalFields.id.required(),
+}).required();
+
+export const productDetails = joi.object({
+    productId: generalFields.id.required(),
 }).required();

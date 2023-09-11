@@ -59,3 +59,13 @@ export const deleteCategory = asyncHandler(async (req, res, next) => {
     }
     return res.status(200).json({ message: 'success' });
 })
+
+export const getProducts = asyncHandler(async (req, res, next) => {
+
+    const { categoryId } = req.params;
+    const products = await categoryModel.find({ _id: categoryId }).select('products').populate({
+        path: 'products',
+        match: { isDeleted: { $eq: false } }
+    })
+    return res.status(201).json({ message: 'success', products });
+})

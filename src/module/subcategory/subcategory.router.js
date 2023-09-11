@@ -19,5 +19,6 @@ router.get('/specificSubcategory', validation(validators.specificSubcategory),
 
 router.get('/allSubcategories', subcategoryController.getAllSubcategories);
 
+router.get('/:subcategoryId/products', validation(validators.getProducts), subcategoryController.getProducts);
 
 export default router;

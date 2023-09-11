@@ -20,3 +20,7 @@ export const categoryDetails = joi.object({
 export const deleteCategory = joi.object({
     categoryId: generalFields.id.required(),
 }).required();
+
+export const getProducts = joi.object({
+    categoryId: generalFields.id.required(),
+}).required();

@@ -8,7 +8,7 @@ import * as validators from './category.validation.js';
 import subcategoryRouter from '../subcategory/subcategory.router.js';
 const router = Router();
 
-router.use('/:categoryId',subcategoryRouter);
+router.use('/:categoryId', subcategoryRouter);
 router.post('/createCategory', auth(endPoint.createCategory), fileUpload(fileValidation.image).single('image'),
     validation(validators.createCategory), categoryController.createCategory);
 
@@ -19,4 +19,6 @@ router.get('/allCategory', categoryController.getAllCategory);
 router.get('/categoryDetails/:categoryId', validation(validators.categoryDetails), categoryController.categoryDetails);
 
 router.delete('/deleteCategory/:categoryId', auth(endPoint.deleteCategory), validation(validators.deleteCategory), categoryController.deleteCategory);
+router.get('/:categoryId/products', validation(validators.getProducts), categoryController.getProducts);
+
 export default router;

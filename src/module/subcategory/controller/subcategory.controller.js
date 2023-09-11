@@ -57,3 +57,13 @@ export const getAllSubcategories = asyncHandler(async (req, res, next) => {
     });
     return res.status(200).json({ message: 'success', subcategories });
 })
+
+export const getProducts = asyncHandler(async (req, res, next) => {
+
+    const { subcategoryId } = req.params;
+    const products = await subcategoryModel.find({ _id: subcategoryId }).select('products').populate({
+        path: 'products',
+        match: { isDeleted: { $eq: false } }
+    })
+    return res.status(201).json({ message: 'success', products });
+})
