@@ -9,8 +9,6 @@ export const createProduct = joi.object({
     description: joi.string(),
     discount: joi.number().positive(),
     file: generalFields.file,
-    createdBy: generalFields.id.required(),
-    updatedBy: generalFields.id.required(),
 }).required();
 
 export const updateProduct = joi.object({
@@ -21,5 +19,6 @@ export const updateProduct = joi.object({
     description: joi.string(),
     discount: joi.number().positive(),
     file: generalFields.file,
-    updatedBy: generalFields.id.required(),
+    updatedBy: generalFields.id,
+    productId:generalFields.id.required(),
 }).required();

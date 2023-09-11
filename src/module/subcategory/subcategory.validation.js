@@ -5,8 +5,6 @@ export const createSubcategory = joi.object({
     name: joi.string().required(),
     file: generalFields.file.required(),
     categoryId: generalFields.id.required(),
-    createdBy: generalFields.id.required(),
-    updatedBy: generalFields.id.required(),
 }).required();
 
 export const updateSubcategory = joi.object({
@@ -14,7 +12,7 @@ export const updateSubcategory = joi.object({
     categoryId: generalFields.id.required(),
     subcategoryId: generalFields.id.required(),
     name: joi.string(),
-    updatedBy: generalFields.id.required(),
+    updatedBy: generalFields.id,
 }).required();
 
 export const specificSubcategory = joi.object({

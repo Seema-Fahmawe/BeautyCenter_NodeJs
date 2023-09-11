@@ -4,15 +4,13 @@ import { generalFields } from './../../middleware/validation.js';
 export const createCategory = joi.object({
     name: joi.string().required(),
     file: generalFields.file.required(),
-    createdBy: generalFields.id.required(),
-    updatedBy: generalFields.id.required(),
 }).required();
 
 export const updateCategory = joi.object({
     name: joi.string(),
     file: generalFields.file,
     categoryId: generalFields.id.required(),
-    updatedBy: generalFields.id.required(),
+    updatedBy: generalFields.id,
 }).required();
 
 export const categoryDetails = joi.object({
