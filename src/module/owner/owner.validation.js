@@ -14,3 +14,7 @@ export const updateOwner = joi.object({
     city: joi.string(),
     centerName:joi.string(),
 }).required();
+
+export const deleteOwner = joi.object({
+    ownerId: generalFields.id.required(),
+}).required();

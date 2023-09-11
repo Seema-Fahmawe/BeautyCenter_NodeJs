@@ -54,3 +54,11 @@ export const ownerDetails = asyncHandler(async (req, res, next) => {
     return res.status(200).json({ message: 'success', owner });
 })
 
+export const deleteOwner = asyncHandler(async (req, res, next) => {
+    const { ownerId } = req.params;
+    let owner = await ownerModel.findOneAndDelete({ _id: ownerId });
+    if (!owner) {
+        return next(new Error('this owner not found', { cause: 400 }));
+    }
+    return res.status(200).json({ message: 'success' });
+})

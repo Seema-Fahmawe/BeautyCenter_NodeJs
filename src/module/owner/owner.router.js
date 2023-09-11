@@ -11,4 +11,6 @@ router.get('/allOwners', auth(endPoint.getOwners), ownerController.getOwners);
 router.get('/ownerDetails/:ownerId', auth(endPoint.ownerDetails), validation(validators.ownerDetails), ownerController.ownerDetails);
 router.put('/updateOwner', auth(endPoint.updateOwner), validation(validators.updateOwner),
     ownerController.updateOwner);
+router.delete('/deleteOwner/:ownerId', auth(endPoint.deleteOwner), validation(validators.deleteOwner),
+    ownerController.deleteOwner);
 export default router;

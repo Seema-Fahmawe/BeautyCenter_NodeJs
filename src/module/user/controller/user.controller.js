@@ -43,5 +43,15 @@ export const updatePassword = asyncHandler(async (req, res, next) => {
   return res.status(200).json({ message: 'success' });
 })
 
+export const deleteUser = asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  let user = await userModel.findOne({ _id: userId, role: 'User' });
+  if (!user) {
+    return next(new Error('this user not found', { cause: 400 }));
+  }
+  user = await userModel.deleteOne({_id:userId});
+  return res.status(200).json({message:'success'});
+})
+
 
 

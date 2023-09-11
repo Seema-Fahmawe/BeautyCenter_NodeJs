@@ -14,3 +14,7 @@ export const updatePassword = joi.object({
     newPassword: generalFields.password.required(),
 }).required();
 
+export const deleteUser = joi.object({
+    userId: generalFields.id.required(),
+}).required();
+

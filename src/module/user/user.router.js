@@ -18,4 +18,6 @@ router.get('/:userId/userDetails', auth(endPoint.userDetails), validation(valida
 router.patch('/updatePassword', auth(Object.values(roles)), validation(validators.updatePassword),
     userController.updatePassword);
 
+router.delete('/deleteUser/:userId', auth(endPoint.deleteUser), validation(validators.deleteUser),
+    userController.deleteUser);
 export default router;

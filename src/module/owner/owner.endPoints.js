@@ -5,4 +5,5 @@ export const endPoint = {
     getOwners: [roles.Admin],
     ownerDetails: [roles.Admin],
     updateOwner: [roles.Owner],
+    deleteOwner:[roles.Admin],
 }
