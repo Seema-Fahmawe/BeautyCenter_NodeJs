@@ -9,10 +9,6 @@ export const createReservation = joi.object({
     status: joi.string(),
 }).required();
 
-export const updateReservedProducts = joi.object({
-    reservationId: generalFields.id.required(),
-    products: joi.array().required(),
-}).required();
 
 export const delayReservation = joi.object({
     reservationId: generalFields.id.required(),
