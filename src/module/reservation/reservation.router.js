@@ -22,5 +22,5 @@ router.get('/reservationDetails/:reservationId', auth(endPoint.reservationDetail
 
 router.patch('/:reservationId/updateStatusFinishedReservation', validation(validators.updateStatusFinishedReservation),
     auth(endPoint.updateStatusFinishedReservation), reservationController.updateStatusFinishedReservation);
-    
+
 export default router;
