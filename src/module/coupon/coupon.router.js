@@ -5,7 +5,7 @@ import { endPoint } from "./coupon.endPoints.js";
 import fileUpload, { fileValidation } from "../../service/multer.js";
 import { validation } from "../../middleware/validation.js";
 import * as validators from './coupon.validation.js';
-const router = Router();
+const router = Router({ mergeParams: true });
 
 router.post('/createCoupon', auth(endPoint.createCoupon), fileUpload(fileValidation.image).single('image'),
     validation(validators.createCoupon), couponController.createCoupon);
@@ -13,7 +13,7 @@ router.post('/createCoupon', auth(endPoint.createCoupon), fileUpload(fileValidat
 router.put('/updateCoupon/:couponId', auth(endPoint.updateCoupon), validation(validators.updateCoupon),
     couponController.updateCoupon);
 
-router.get('/allCoupons', couponController.getAllCoupon);
+router.get('/allCoupons', validation(validators.getAllCoupon), couponController.getAllCoupon);
 router.get('/couponDetails/:couponId', validation(validators.couponDetails), couponController.couponDetails);
 
 export default router;

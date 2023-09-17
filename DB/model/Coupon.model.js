@@ -6,10 +6,6 @@ const couponSchema = new Schema({
         unique: true,
         required: true,
     },
-    amount: {
-        type: Number,
-        default: 1,
-    },
     expireDate: {
         type: String,
         required: true,
@@ -21,16 +17,20 @@ const couponSchema = new Schema({
         type: Types.ObjectId,
         ref: 'User',
     }],
+    amount: {
+        type: Number,
+        default: 1,
+    },
     createdBy: {
         type: Types.ObjectId,
-        ref: 'User',
+        ref: 'Owner',
         required: true,
     },
     updatedBy: {
         type: Types.ObjectId,
-        ref: 'User',
+        ref: 'Owner',
         required: true,
-    }
+    },
 }, {
     timestamps: true,
 })

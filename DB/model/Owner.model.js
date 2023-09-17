@@ -52,6 +52,19 @@ const ownerSchema = new Schema({
         type: String,
         default: 'Female',
         enum: ['Male', 'Female']
+    },
+    workDays: {
+        type:[{type:String}],
+        default: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'],
+        enum: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    },
+    startTimeWork: {
+        type: String,
+        default: "09:00:00",
+    },
+    endTimeWork: {
+        type: String,
+        default: "20:00:00",
     }
 }, {
     timestamps: true,

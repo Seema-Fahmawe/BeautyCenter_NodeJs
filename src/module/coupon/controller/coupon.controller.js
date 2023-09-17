@@ -2,6 +2,7 @@ import couponModel from '../../../../DB/model/Coupon.model.js';
 import { asyncHandler } from './../../../service/errorHandling.js';
 
 export const createCoupon = asyncHandler(async (req, res, next) => {
+
     const { name, expireDate, amount } = req.body;
     if (await couponModel.findOne({ name })) {
         return next(new Error(`Duplicate coupon name`, { cause: 409 }));
@@ -35,9 +36,6 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         }
         coupon.name = name;
     }
-    if (req.body.amount) {
-        coupon.amount = req.body.amount;
-    }
     if (req.body.expireDate) {
         let date = new Date(req.body.expireDate);
         const now = new Date();
@@ -47,17 +45,23 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         date = date.toLocaleDateString();
         coupon.expireDate = date;
     }
+    if (req.body.amount) {
+        coupon.amount = req.body.amount;
+    }
     coupon.updatedBy = req.owner._id;
     await coupon.save();
     return res.status(201).json({ message: 'success', coupon });
 })
 
 export const getAllCoupon = asyncHandler(async (req, res, next) => {
-    const coupons = await couponModel.find();
+
+    const coupons = await couponModel.find({ createdBy: req.params.ownerId });
     return res.status(200).json({ message: 'success', coupons });
 })
 
-export const couponDetails=asyncHandler(async(req,res,next)=>{
-    const coupon=await couponModel.findById(req.params.couponId);
-    return res.status(200).json({message:'success',coupon});
+export const couponDetails = asyncHandler(async (req, res, next) => {
+
+    const { couponId, ownerId } = req.params;
+    const coupon = await couponModel.findOne({ createdBy: ownerId, _id: couponId });
+    return res.status(200).json({ message: 'success', coupon });
 })

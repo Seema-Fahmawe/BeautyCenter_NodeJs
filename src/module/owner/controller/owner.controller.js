@@ -62,3 +62,15 @@ export const deleteOwner = asyncHandler(async (req, res, next) => {
     }
     return res.status(200).json({ message: 'success' });
 })
+
+export const getInfoCenter = asyncHandler(async (req, res, next) => {
+
+    const center = await ownerModel.findById(req.params.ownerId).select('ownerName centerName city phone workDays');
+    return res.status(200).json({ message: 'success', center });
+})
+
+export const getCenters = asyncHandler(async (req, res, next) => {
+
+    const center = await ownerModel.find().select('ownerName centerName city phone workDays');
+    return res.status(200).json({ message: 'success', center });
+})

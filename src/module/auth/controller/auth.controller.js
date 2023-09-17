@@ -656,7 +656,7 @@ export const forgetPassword = asyncHandler(async (req, res, next) => {
 })
 
 export const signupOwner = asyncHandler(async (req, res, next) => {
-  let { ownerName, centerName, email, password, cPassword, phone, city, gender } = req.body;
+  let { ownerName, centerName, email, password, cPassword, phone, city, gender, workDays, startTimeWork, endTimeWork } = req.body;
   if (await ownerModel.findOne({ email })) {
     return next(new Error('account already exists', { cause: 409 }));
   }
@@ -928,7 +928,10 @@ export const signupOwner = asyncHandler(async (req, res, next) => {
     </body>
     </html>`
   await sendEmail(email, 'confirm email', html);
-  const owner = await ownerModel.create({ email, ownerName, centerName, password, phone, city, gender });
+  const owner = await ownerModel.create({
+    email, ownerName, centerName, password, phone, city, gender, workDays,
+    startTimeWork, endTimeWork
+  });
   return res.status(201).json({ message: 'success', owner: owner._id });
 })
 
