@@ -111,8 +111,8 @@ export const updateReservedProducts = asyncHandler(async (req, res, next) => {
         finalProductList.push(product);
     }
     req.body.products = finalProductList;
-    reservation.finalPrice = totalPrice - (totalPrice * ((req.body.coupon?.amount || 0) / 100))
     reservation.products = products;
+    reservation.finalPrice = totalPrice - (totalPrice * ((req.body.coupon?.amount || 0) / 100))
     await reservation.save();
     return res.status(200).json({ message: 'success', reservation });
 })
