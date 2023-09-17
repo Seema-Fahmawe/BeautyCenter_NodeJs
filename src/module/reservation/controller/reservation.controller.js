@@ -113,9 +113,14 @@ export const delayReservation = asyncHandler(async (req, res, next) => {
 
     const { reservationId } = req.params;
     const { date } = req.body;
+
     const reservation = await reservationModel.findOne({ _id: reservationId, userId: req.user._id });
     if (!reservation) {
         return next(new Error('invalid reservation', { cause: 400 }));
+    }
+    const checkDate = await reservationModel.findOne({ date });
+    if (checkDate) {
+        return next(new Error(`That time is reserved`, { cause: 400 }));
     }
     const center = await ownerModel.findOne({ _id: reservation.ownerId });
     if (!center) {
