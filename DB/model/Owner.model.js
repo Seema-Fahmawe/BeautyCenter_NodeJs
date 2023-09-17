@@ -78,5 +78,11 @@ ownerSchema.virtual('coupons', {
     ref: 'Coupon'
 })
 
+ownerSchema.virtual('reviews',{
+    localField:'_id',
+    foreignField:'ownerId',
+    ref:'Review',
+})
+
 const ownerModel = mongoose.models.Owner || model('Owner', ownerSchema);
 export default ownerModel;
