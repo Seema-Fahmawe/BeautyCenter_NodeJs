@@ -87,35 +87,7 @@ export const createReservation = asyncHandler(async (req, res, next) => {
     return res.status(201).json({ message: 'success', reservation });
 })
 
-export const updateReservedProducts = asyncHandler(async (req, res, next) => {
 
-    const { reservationId } = req.params;
-    let { products } = req.body;
-    const reservation = await reservationModel.findOne({ _id: reservationId, userId: req.user._id });
-    if (!reservation) {
-        return next(new Error('invalid reservation', { cause: 400 }));
-    }
-    const productIds = [];
-    const finalProductList = [];
-    let totalPrice = 0;
-    for (const product of products) {
-        const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false, createdBy: reservation.ownerId });
-        if (!checkProduct) {
-            return next(new Error('invalid service', { cause: 400 }));
-        }
-        product.finalPrice = checkProduct.finalPrice;
-        product.name = checkProduct.name;
-        product.description = checkProduct.description;
-        totalPrice += product.finalPrice;
-        productIds.push(product.productId);
-        finalProductList.push(product);
-    }
-    req.body.products = finalProductList;
-    reservation.products = products;
-    reservation.finalPrice = totalPrice - (totalPrice * ((req.body.coupon?.amount || 0) / 100))
-    await reservation.save();
-    return res.status(200).json({ message: 'success', reservation });
-})
 
 export const delayReservation = asyncHandler(async (req, res, next) => {
 
