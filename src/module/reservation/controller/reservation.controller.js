@@ -14,7 +14,7 @@ export const createReservation = asyncHandler(async (req, res, next) => {
     }
 
     if (couponName) {
-        const coupon = await couponModel.findOne({ name: couponName.toLowerCase() });
+        const coupon = await couponModel.findOne({ name: couponName.toLowerCase(), createdBy: center._id });
         if (!coupon) {
             return next(new Error(`invalid coupon ${couponName}`, { cause: 400 }));
         }
@@ -34,7 +34,7 @@ export const createReservation = asyncHandler(async (req, res, next) => {
     const finalProductList = [];
     let totalPrice = 0;
     for (const product of products) {
-        const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false });
+        const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false, createdBy: center._id });
         if (!checkProduct) {
             return next(new Error('invalid service', { cause: 400 }));
         }
@@ -96,14 +96,21 @@ export const updateReservedProducts = asyncHandler(async (req, res, next) => {
         return next(new Error('invalid reservation', { cause: 400 }));
     }
     const productIds = [];
+    const finalProductList = [];
+    let totalPrice = 0;
     for (const product of products) {
-        const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false });
+        const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false, createdBy: reservation.ownerId });
         if (!checkProduct) {
             return next(new Error('invalid service', { cause: 400 }));
         }
+        product.finalPrice = checkProduct.finalPrice;
+        product.name = checkProduct.name;
+        product.description = checkProduct.description;
+        totalPrice += product.finalPrice;
         productIds.push(product.productId);
+        finalProductList.push(product);
     }
-    req.body.products = productIds;
+    req.body.products = finalProductList;
     reservation.products = products;
     await reservation.save();
     return res.status(200).json({ message: 'success', reservation });

@@ -54,7 +54,7 @@ const ownerSchema = new Schema({
         enum: ['Male', 'Female']
     },
     workDays: {
-        type:[{type:String}],
+        type: [{ type: String }],
         default: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday'],
         enum: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     },
@@ -67,7 +67,15 @@ const ownerSchema = new Schema({
         default: "20:00:00",
     }
 }, {
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true},
     timestamps: true,
+})
+
+ownerSchema.virtual('coupons', {
+    localField: '_id',
+    foreignField: 'createdBy',
+    ref: 'Coupon'
 })
 
 const ownerModel = mongoose.models.Owner || model('Owner', ownerSchema);
