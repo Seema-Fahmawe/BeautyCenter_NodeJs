@@ -15,7 +15,7 @@ router.patch('/delayReservation/:reservationId', auth(endPoint.delayReservation)
 router.patch('/canceleReservation/:reservationId', auth(endPoint.canceleReservation),
     validation(validators.canceleReservation), reservationController.canceleReservation);
 
-router.get('/:ownerId/allReservation', auth(endPoint.allReservation), reservationController.getAllReservations);
+router.get('/allReservation', auth(endPoint.allReservation), reservationController.getAllReservations);
 
 router.get('/reservationDetails/:reservationId', auth(endPoint.reservationDetails),
     validation(validators.reservationDetails), reservationController.reservationDetails);
