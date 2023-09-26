@@ -17,6 +17,10 @@ export const categoryDetails = joi.object({
     categoryId: generalFields.id.required(),
 }).required();
 
+export const allCategory=joi.object({
+    ownerId:generalFields.id.required(),
+}).required();
+
 export const deleteCategory = joi.object({
     categoryId: generalFields.id.required(),
 }).required();

@@ -5,7 +5,7 @@ import { asyncHandler } from './../../../service/errorHandling.js';
 
 export const createSubcategory = asyncHandler(async (req, res, next) => {
     const name = req.body.name.toLowerCase();
-    if (await subcategoryModel.findOne({ name })) {
+    if (await subcategoryModel.findOne({ name, createdBy: req.owner._id })) {
         return next(new Error(`Duplicate subcategory name`, { cause: 409 }));
     }
     const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/subcategory` });
@@ -51,7 +51,7 @@ export const getSpecificSubcategory = asyncHandler(async (req, res, next) => {
 
 export const getAllSubcategories = asyncHandler(async (req, res, next) => {
 
-    const subcategories = await subcategoryModel.find().populate({
+    const subcategories = await subcategoryModel.find({ createdBy: req.params.ownerId }).populate({
         path: 'categoryId',
         select: 'name image'
     });

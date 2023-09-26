@@ -6,6 +6,7 @@ import { compare, hash } from '../../../service/hashAndCompare.js';
 import sendEmail from '../../../service/sendEmail.js';
 import { asyncHandler } from './../../../service/errorHandling.js';
 import ownerModel from '../../../../DB/model/Owner.model.js';
+import cloudinary from '../../../service/cloudinary.js';
 
 export const signup = asyncHandler(async (req, res, next) => {
   let { userName, email, password, cPassword, phone, gender } = req.body;
@@ -13,6 +14,10 @@ export const signup = asyncHandler(async (req, res, next) => {
     return next(new Error('account already exists', { cause: 409 }));
   }
   password = hash(password);
+  if (req.file) {
+    const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/user` });
+    req.body.image = { public_id, secure_url };
+  }
   const token = generateToken({ email }, process.env.SIGNATURE_SIGNUP, 60 * 5);
   const refresh_token = generateToken({ email }, process.env.SIGNATURE_SIGNUP, 60 * 60 * 24);
   const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`;
@@ -280,7 +285,7 @@ export const signup = asyncHandler(async (req, res, next) => {
     </body>
     </html>`
   await sendEmail(email, 'confirm email', html);
-  const user = await userModel.create({ email, userName, password, phone, gender });
+  const user = await userModel.create({ email, userName, image: req.body.image, password, phone, gender });
   return res.status(201).json({ message: 'success', user: user._id });
 })
 

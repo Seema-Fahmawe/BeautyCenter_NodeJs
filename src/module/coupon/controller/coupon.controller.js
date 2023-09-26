@@ -4,7 +4,7 @@ import { asyncHandler } from './../../../service/errorHandling.js';
 export const createCoupon = asyncHandler(async (req, res, next) => {
 
     const { name, expireDate, amount } = req.body;
-    if (await couponModel.findOne({ name })) {
+    if (await couponModel.findOne({ name,createdBy: req.owner._id })) {
         return next(new Error(`Duplicate coupon name`, { cause: 409 }));
     }
     let date = new Date(expireDate);
@@ -31,7 +31,7 @@ export const updateCoupon = asyncHandler(async (req, res, next) => {
         if (coupon.name === name) {
             return next(new Error(`old name match new name`, { cause: 400 }));
         }
-        if (await couponModel.findOne({ name })) {
+        if (await couponModel.findOne({ name,createdBy: req.owner._id })) {
             return next(new Error(`Duplicate coupon name`, { cause: 400 }));
         }
         coupon.name = name;

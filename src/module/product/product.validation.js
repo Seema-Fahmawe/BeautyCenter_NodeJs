@@ -31,6 +31,14 @@ export const forceDelete = joi.object({
     productId: generalFields.id.required(),
 }).required();
 
+export const allProducts = joi.object({
+    ownerId: generalFields.id.required(),
+}).required();
+
+export const softDeleteProducts = joi.object({
+    ownerId: generalFields.id.required(),
+}).required();
+
 export const restoreProduct = joi.object({
     productId: generalFields.id.required(),
 }).required();

@@ -15,6 +15,10 @@ export const updateSubcategory = joi.object({
     updatedBy: generalFields.id,
 }).required();
 
+export const allSubcategories = joi.object({
+    ownerId: generalFields.id.required(),
+}).required();
+
 export const specificSubcategory = joi.object({
     categoryId: generalFields.id.required(),
 }).required();

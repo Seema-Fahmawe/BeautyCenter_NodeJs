@@ -9,6 +9,8 @@ import couponRouter from './coupon/coupon.router.js';
 import productRouter from './product/product.router.js';
 import reservationRouter from './reservation/reservation.router.js';
 import reviewRouter from './review/review.router.js';
+import postRouter from './post/post.router.js';
+import commentRouter from './comment/comment.router.js';
 
 import cors from 'cors';
 
@@ -32,6 +34,8 @@ const initApp = (app, express) => {
     app.use('/product', productRouter);
     app.use('/reservation', reservationRouter);
     app.use('/review', reviewRouter);
+    app.use('/post',postRouter);
+    app.use('/comment',commentRouter);
     app.use('*', (req, res) => {
         return res.json({ message: 'page not found' });
     })

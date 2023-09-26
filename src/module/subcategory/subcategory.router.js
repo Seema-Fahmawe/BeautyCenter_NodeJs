@@ -17,7 +17,7 @@ router.put('/updateSubcategory/:subcategoryId', auth(endPoint.createSubcategory)
 router.get('/specificSubcategory', validation(validators.specificSubcategory),
     subcategoryController.getSpecificSubcategory);
 
-router.get('/allSubcategories', subcategoryController.getAllSubcategories);
+router.get('/:ownerId/allSubcategories', validation(validators.allSubcategories), subcategoryController.getAllSubcategories);
 
 router.get('/:subcategoryId/products', validation(validators.getProducts), subcategoryController.getProducts);
 

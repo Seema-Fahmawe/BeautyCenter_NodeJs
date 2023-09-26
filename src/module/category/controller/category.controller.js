@@ -5,7 +5,7 @@ import cloudinary from '../../../service/cloudinary.js';
 
 export const createCategory = asyncHandler(async (req, res, next) => {
     const name = req.body.name.toLowerCase();
-    if (await categoryModel.findOne({ name })) {
+    if (await categoryModel.findOne({ name,createdBy:req.owner._id })) {
         return next(new Error(`Duplicate category name`, { cause: 409 }));
     }
     const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/category` });
@@ -43,7 +43,7 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 })
 
 export const getAllCategory = asyncHandler(async (req, res, next) => {
-    const categories = await categoryModel.find();
+    const categories = await categoryModel.find({createdBy:req.params.ownerId});
     return res.status(200).json({ message: 'success', categories });
 })
 

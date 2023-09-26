@@ -8,4 +8,5 @@ export const endPoint = {
     allReservation:[roles.Owner],
     reservationDetails:[roles.Owner],
     updateStatusFinishedReservation:[roles.Owner],
+    updateReservation:[roles.User],
 }

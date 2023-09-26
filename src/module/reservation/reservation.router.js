@@ -9,6 +9,9 @@ const router = Router();
 router.post('/createReservation', auth(endPoint.createReservation), validation(validators.createReservation),
     reservationController.createReservation);
 
+router.put('/updateReservation/:reservationId', auth(endPoint.updateReservation),
+    validation(validators.updateReservation), reservationController.updateReservation);
+
 router.patch('/delayReservation/:reservationId', auth(endPoint.delayReservation),
     validation(validators.delayReservation), reservationController.delayReservation);
 

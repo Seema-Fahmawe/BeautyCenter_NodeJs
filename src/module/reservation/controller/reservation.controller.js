@@ -7,10 +7,14 @@ import couponModel from './../../../../DB/model/Coupon.model.js';
 
 export const createReservation = asyncHandler(async (req, res, next) => {
 
-    let { date, products, centerName, couponName, status } = req.body;
-    const center = await ownerModel.findOne({ centerName: centerName.toLowerCase() });
+    let { date, products, ownerId, couponName, status } = req.body;
+    const center = await ownerModel.findOne({ _id: ownerId });
     if (!center) {
         return next(new Error(`invalid center ${centerName}`, { cause: 400 }));
+    }
+    const checkReservation = await reservationModel.findOne({ date, ownerId });
+    if (checkReservation) {
+        return next(new Error(`That time is reserved`, { cause: 400 }));
     }
 
     if (couponName) {
@@ -53,10 +57,6 @@ export const createReservation = asyncHandler(async (req, res, next) => {
     if (diff >= 0) {
         return next(new Error('invalid date', { cause: 400 }));
     }
-    const checkReservation = await reservationModel.findOne({ date });
-    if (checkReservation) {
-        return next(new Error(`That time is reserved`, { cause: 400 }));
-    }
     let bookDay = moment(parsed).utcOffset(10 * 60).format();
     bookDay = moment(bookDay).format("dddd");
     let bookTime = moment(parsed).format("HH:mm:ss");
@@ -87,7 +87,86 @@ export const createReservation = asyncHandler(async (req, res, next) => {
     return res.status(201).json({ message: 'success', reservation });
 })
 
+export const updateReservation = asyncHandler(async (req, res, next) => {
 
+    const reservation = await reservationModel.findOne({ _id: req.params.reservationId, userId: req.user._id });
+    if (!reservation) {
+        return next(new Error(`invalid reservation id ${req.params.reservationId}`, { cause: 400 }));
+    }
+    if (req.body.status) {
+        if (req.body.status === "canceled") {
+            reservation.date = "invalid date";
+            reservation.status = 'canceled';
+        }
+        if (req.body.status === "delayed") {
+            const { date } = req.body;
+            const center = await ownerModel.findOne({ _id: reservation.ownerId });
+            if (!center) {
+                return next(new Error(`invalid center `, { cause: 400 }));
+            }
+            const checkDate = await reservationModel.findOne({ date, ownerId: reservation.ownerId });
+            if (checkDate) {
+                return next(new Error(`That time is reserved`, { cause: 400 }));
+            }
+            let now = moment();
+            let parsed = moment(date, 'DD/MM/YYYY hh:mm:ss');
+            let diff = now.diff(parsed, 'hours');
+            if (diff >= 0) {
+                return next(new Error('invalid date', { cause: 400 }));
+            }
+            let bookDay = moment(parsed).utcOffset(10 * 60).format();
+            bookDay = moment(bookDay).format("dddd");
+            let bookTime = moment(parsed).format("HH:mm:ss");
+
+            if (center.workDays.includes(bookDay)) {
+                if (bookTime > center.startTimeWork && bookTime < center.endTimeWork) {
+                    req.body.date = date;
+                } else {
+                    return next(new Error('The center is not working at this time', { cause: 400 }));
+                }
+            } else {
+                return next(new Error('The center is not working at this day', { cause: 400 }));
+            }
+            if (reservation.couponId) {
+                const coupon = await couponModel.findOne({ _id: reservation.couponId });
+                const couponDate = moment(coupon.expireDate, 'DD/MM/YYYY');
+                let diff = parsed.diff(couponDate, 'days');
+                if (diff >= 0) {
+                    await couponModel.updateOne({ _id: reservation.couponId }, { $pull: { usedBy: req.user._id } });
+                    return next(new Error('coupon expire date', { cause: 400 }));
+                }
+                req.body.coupon = coupon;
+            }
+            reservation.date = date;
+            reservation.status = 'delayed';
+        }
+    }
+    if (req.body.products) {
+        const productIds = [];
+        const finalProductList = [];
+        let totalPrice = 0;
+        for (const product of req.body.products) {
+            const checkProduct = await productModel.findOne({ _id: product.productId, isDeleted: false, createdBy: reservation.ownerId });
+            if (!checkProduct) {
+                return next(new Error('invalid service', { cause: 400 }));
+            }
+            product.finalPrice = checkProduct.finalPrice;
+            product.name = checkProduct.name;
+            product.description = checkProduct.description;
+            totalPrice += product.finalPrice;
+            productIds.push(product.productId);
+            finalProductList.push(product);
+        }
+        if (reservation.couponId) {
+            const coupon = await couponModel.findOne({ _id: reservation.couponId });
+            req.body.coupon = coupon;
+        }
+        reservation.products = finalProductList;
+        reservation.finalPrice = totalPrice - (totalPrice * ((req.body.coupon?.amount || 0) / 100));
+    }
+    await reservation.save();
+    return res.status(200).json({ message: 'success', reservation });
+})
 
 export const delayReservation = asyncHandler(async (req, res, next) => {
 

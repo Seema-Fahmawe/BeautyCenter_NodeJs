@@ -2,11 +2,11 @@ import joi from 'joi';
 import { generalFields } from '../../middleware/validation.js';
 
 export const signup = joi.object({
-    file: generalFields.file,
     userName: joi.string().min(3).max(20).required(),
     password: generalFields.password,
     email: generalFields.email.required(),
     cPassword: joi.string().valid(joi.ref('password')).required(),
+    file: generalFields.file,
     phone: joi.string(),
     gender: joi.string(),
 }).required();

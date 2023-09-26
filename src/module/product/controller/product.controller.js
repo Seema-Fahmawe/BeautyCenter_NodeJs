@@ -7,12 +7,12 @@ import subcategoryModel from './../../../../DB/model/Subcategory.model.js';
 export const createProduct = asyncHandler(async (req, res, next) => {
 
     let { name, price, description, discount, categoryId, subcategoryId, finalPrice } = req.body;
-    const checkCategory = await subcategoryModel.findOne({ _id: subcategoryId, categoryId });
+    const checkCategory = await subcategoryModel.findOne({ _id: subcategoryId, categoryId, createdBy: req.owner._id });
     if (!checkCategory) {
         return next(new Error('invalid category or sub category', { cause: 400 }));
     }
     name = req.body.name.toLowerCase();
-    if (await productModel.findOne({ name })) {
+    if (await productModel.findOne({ name, createdBy: req.owner._id })) {
         return next(new Error(`Duplicate product name`, { cause: 409 }));
     }
 
@@ -137,7 +137,7 @@ export const restoreProduct = asyncHandler(async (req, res, next) => {
 
 export const getAllProducts = asyncHandler(async (req, res, next) => {
 
-    const products = await productModel.find();
+    const products = await productModel.find({ createdBy: req.params.ownerId });
     return res.status(200).json({ message: 'success', products });
 })
 
@@ -152,6 +152,6 @@ export const productDetails = asyncHandler(async (req, res, next) => {
 
 export const getSoftDeleteProducts = asyncHandler(async (req, res, next) => {
 
-    const product = await productModel.find({ isDeleted: true });
+    const product = await productModel.find({ isDeleted: true, createdBy: req.params.ownerId });
     return res.status(201).json({ message: 'success', product });
 })

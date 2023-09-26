@@ -19,7 +19,7 @@ const reservationSchema = new Schema({
     status: {
         type: String,
         default: 'actived',
-        enum: ['cancele', 'delayed', 'actived','finished']
+        enum: ['canceled', 'delayed', 'actived','finished']
     },
     ownerId: {
         type: Types.ObjectId,

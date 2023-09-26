@@ -26,10 +26,10 @@ router.delete('/forceDelete/:productId', auth(endPoint.forceDelete), validation(
 router.patch('/restoreProduct/:productId', auth(endPoint.restoreProduct), validation(validators.restoreProduct),
     productController.restoreProduct);
 
-router.get('/allProducts', productController.getAllProducts);
+router.get('/:ownerId/allProducts', validation(validators.allProducts), productController.getAllProducts);
 
 router.get('/productDetails/:productId', validation(validators.productDetails), productController.productDetails);
 
-router.get('/softDeleteProducts', productController.getSoftDeleteProducts);
+router.get('/:ownerId/softDeleteProducts', validation(validators.softDeleteProducts), productController.getSoftDeleteProducts);
 
 export default router;
