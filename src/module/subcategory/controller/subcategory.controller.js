@@ -2,6 +2,7 @@ import slugify from 'slugify';
 import subcategoryModel from '../../../../DB/model/Subcategory.model.js';
 import cloudinary from '../../../service/cloudinary.js';
 import { asyncHandler } from './../../../service/errorHandling.js';
+import productModel from '../../../../DB/model/Product.model.js';
 
 export const createSubcategory = asyncHandler(async (req, res, next) => {
     const name = req.body.name.toLowerCase();
@@ -66,4 +67,16 @@ export const getProducts = asyncHandler(async (req, res, next) => {
         match: { isDeleted: { $eq: false } }
     })
     return res.status(201).json({ message: 'success', products });
+})
+
+export const deleteSubcategory = asyncHandler(async (req, res, next) => {
+
+    const { subcategoryId } = req.params;
+    const subcategory = await subcategoryModel.findById(subcategoryId);
+    if (!subcategory) {
+        return next(new Error(`subcategory not exists`, { cause: 400 }));
+    }
+    await productModel.deleteMany({ subcategoryId });
+    await subcategoryModel.deleteOne({ subcategoryId });
+    return res.status(200).json({ message: 'success' });
 })

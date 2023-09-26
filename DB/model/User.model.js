@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import mongoose, { Schema, Types, model } from "mongoose";
 
 const userSchema = new Schema({
     userName: {
@@ -44,9 +44,18 @@ const userSchema = new Schema({
         type: String,
         default: 'Female',
         enum: ['Male', 'Female']
-    }
+    },
 }, {
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true},
     timestamps: true,
 })
+
+userSchema.virtual('wishlist',{
+    localField:'_id',
+    foreignField:'userId',
+    ref:'Wishlist',
+})
+
 const userModel = mongoose.models.User || model('User', userSchema);
 export default userModel;

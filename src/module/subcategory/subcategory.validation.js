@@ -26,3 +26,7 @@ export const specificSubcategory = joi.object({
 export const getProducts = joi.object({
     subcategoryId: generalFields.id.required(),
 }).required();
+
+export const deleteSubcategory = joi.object({
+    subcategoryId: generalFields.id.required(),
+}).required();

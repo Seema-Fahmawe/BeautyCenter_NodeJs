@@ -5,6 +5,7 @@ export const createCoupon = joi.object({
     name: joi.string().required(),
     expireDate: joi.string().required(),
     amount: joi.number().positive(),
+    file:generalFields.file,
 }).required();
 
 export const updateCoupon = joi.object({
@@ -13,6 +14,7 @@ export const updateCoupon = joi.object({
     expireDate: joi.string(),
     amount: joi.number().positive(),
     updatedBy: generalFields.id,
+    file:generalFields.file,
 }).required();
 
 export const getAllCoupon = joi.object({
@@ -21,5 +23,4 @@ export const getAllCoupon = joi.object({
 
 export const couponDetails = joi.object({
     couponId: generalFields.id.required(),
-    ownerId: generalFields.id.required(),
 }).required();

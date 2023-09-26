@@ -40,6 +40,11 @@ export const updateOwner = asyncHandler(async (req, res, next) => {
         }
         owner.city = city;
     }
+    if (req.file) {
+        const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/owner` });
+        await cloudinary.uploader.destroy(owner.image.public_id);
+        owner.image = { public_id, secure_url };
+    }
     await owner.save();
     return res.status(201).json({ message: 'success', owner });
 })

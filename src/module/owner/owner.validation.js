@@ -13,6 +13,7 @@ export const updateOwner = joi.object({
     phone: joi.string(),
     city: joi.string(),
     centerName: joi.string(),
+    file:generalFields.file,
 }).required();
 
 export const deleteOwner = joi.object({

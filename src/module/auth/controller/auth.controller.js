@@ -666,6 +666,10 @@ export const signupOwner = asyncHandler(async (req, res, next) => {
     return next(new Error('account already exists', { cause: 409 }));
   }
   password = hash(password);
+  if (req.file) {
+    const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/owner` });
+    req.body.image = { public_id, secure_url };
+  }
   const token = generateToken({ email }, process.env.SIGNATURE_SIGNUP, 60 * 5);
   const refresh_token = generateToken({ email }, process.env.SIGNATURE_SIGNUP, 60 * 60 * 24);
   const link = `${req.protocol}://${req.headers.host}/auth/confirmEmail/${token}`;
@@ -935,7 +939,7 @@ export const signupOwner = asyncHandler(async (req, res, next) => {
   await sendEmail(email, 'confirm email', html);
   const owner = await ownerModel.create({
     email, ownerName, centerName, password, phone, city, gender, workDays,
-    startTimeWork, endTimeWork
+    startTimeWork, endTimeWork, image: req.body.image
   });
   return res.status(201).json({ message: 'success', owner: owner._id });
 })

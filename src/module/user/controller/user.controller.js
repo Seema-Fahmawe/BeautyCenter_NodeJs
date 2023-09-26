@@ -19,12 +19,13 @@ export const profilePic = asyncHandler(async (req, res, next) => {
 })
 
 export const getUsers = asyncHandler(async (req, res, next) => {
+
   const users = await userModel.find({ role: 'User' });
   return res.status(200).json({ message: 'success', users });
 })
 
 export const getSpecificUser = asyncHandler(async (req, res, next) => {
-  const user = await userModel.findById(req.params.userId);
+  const user = await userModel.findById(req.params.userId).populate('wishlist');
   return res.json({ message: 'success', user });
 })
 
@@ -49,8 +50,8 @@ export const deleteUser = asyncHandler(async (req, res, next) => {
   if (!user) {
     return next(new Error('this user not found', { cause: 400 }));
   }
-  user = await userModel.deleteOne({_id:userId});
-  return res.status(200).json({message:'success'});
+  user = await userModel.deleteOne({ _id: userId });
+  return res.status(200).json({ message: 'success' });
 })
 
 

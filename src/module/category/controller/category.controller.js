@@ -2,10 +2,12 @@ import slugify from 'slugify';
 import categoryModel from '../../../../DB/model/Category.model.js';
 import { asyncHandler } from './../../../service/errorHandling.js';
 import cloudinary from '../../../service/cloudinary.js';
+import productModel from '../../../../DB/model/Product.model.js';
+import subcategoryModel from './../../../../DB/model/Subcategory.model.js';
 
 export const createCategory = asyncHandler(async (req, res, next) => {
     const name = req.body.name.toLowerCase();
-    if (await categoryModel.findOne({ name,createdBy:req.owner._id })) {
+    if (await categoryModel.findOne({ name, createdBy: req.owner._id })) {
         return next(new Error(`Duplicate category name`, { cause: 409 }));
     }
     const { public_id, secure_url } = await cloudinary.uploader.upload(req.file.path, { folder: `${process.env.APP_NAME}/category` });
@@ -43,7 +45,7 @@ export const updateCategory = asyncHandler(async (req, res, next) => {
 })
 
 export const getAllCategory = asyncHandler(async (req, res, next) => {
-    const categories = await categoryModel.find({createdBy:req.params.ownerId});
+    const categories = await categoryModel.find({ createdBy: req.params.ownerId });
     return res.status(200).json({ message: 'success', categories });
 })
 
@@ -53,10 +55,15 @@ export const categoryDetails = asyncHandler(async (req, res, next) => {
 })
 
 export const deleteCategory = asyncHandler(async (req, res, next) => {
-    const category = await categoryModel.findByIdAndDelete(req.params.categoryId);
+
+    const { categoryId } = req.params;
+    const category = await categoryModel.findById(categoryId);
     if (!category) {
         return next(new Error(`category not exists`, { cause: 400 }));
     }
+    await productModel.deleteMany({ categoryId });
+    await subcategoryModel.deleteMany({ categoryId });
+    await categoryModel.deleteOne({ categoryId });
     return res.status(200).json({ message: 'success' });
 })
 

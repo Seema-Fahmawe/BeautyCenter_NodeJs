@@ -21,4 +21,7 @@ router.get('/:ownerId/allSubcategories', validation(validators.allSubcategories)
 
 router.get('/:subcategoryId/products', validation(validators.getProducts), subcategoryController.getProducts);
 
+router.delete('/deleteSubcategory/:subcategoryId', auth(endPoint.deleteSubcategory),
+    validation(validators.deleteSubcategory), subcategoryController.deleteSubcategory);
+
 export default router;
