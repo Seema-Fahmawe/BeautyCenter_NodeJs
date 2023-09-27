@@ -3,9 +3,13 @@ import subcategoryModel from '../../../../DB/model/Subcategory.model.js';
 import cloudinary from '../../../service/cloudinary.js';
 import { asyncHandler } from './../../../service/errorHandling.js';
 import productModel from '../../../../DB/model/Product.model.js';
+import categoryModel from './../../../../DB/model/Category.model.js';
 
 export const createSubcategory = asyncHandler(async (req, res, next) => {
     const name = req.body.name.toLowerCase();
+    if (!await categoryModel.findOne({ categoryId: req.params.categoryId, createdBy: req.owner._id })) {
+        return next(new Error(`invalid category id`, { cause: 409 }));
+    }
     if (await subcategoryModel.findOne({ name, createdBy: req.owner._id })) {
         return next(new Error(`Duplicate subcategory name`, { cause: 409 }));
     }
