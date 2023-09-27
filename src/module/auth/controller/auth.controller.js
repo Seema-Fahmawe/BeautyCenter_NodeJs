@@ -586,11 +586,11 @@ export const signin = asyncHandler(async (req, res, next) => {
   if (!user && !owner) {
     return next(new Error("invalid login data", { cause: 404 }));
   }
-  if ((!user?.confirmEmail && !owner?.confirmEmail)) {
-    return next(new Error("plz verify your email", { cause: 400 }));
-  }
   if (owner?.status === 'deactivated') {
     return next(new Error('plz wait for the admin to accept your request', { cause: 400 }));
+  }
+  if ((!user?.confirmEmail && !owner?.confirmEmail)) {
+    return next(new Error("plz verify your email", { cause: 400 }));
   }
   if (user) {
     const match = compare(password, user.password);
